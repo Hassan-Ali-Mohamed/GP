@@ -14,13 +14,14 @@ import { debounceTime, distinctUntilChanged, switchMap } from 'rxjs/operators';
   styleUrl: './chat.component.css'
 })
 
-//2436ae4b-ea40-47a6-819d-ca3119d115ac - Teacher
-//eeb9f898-e75e-4e28-bdbe-4c77bce549c1 - Student
-//11476ea3-92df-4864-8117-5ffd12690b63 - Teacher
 export class ChatComponent implements OnInit {
 
-  private postService = inject(ChatService);
-  userId = '2436ae4b-ea40-47a6-819d-ca3119d115ac';
+  private chatService = inject(ChatService);
+  //2436ae4b-ea40-47a6-819d-ca3119d115ac - Teacher
+  //eeb9f898-e75e-4e28-bdbe-4c77bce549c1 - Student
+  //11476ea3-92df-4864-8117-5ffd12690b63 - Teacher
+  userId = '11476ea3-92df-4864-8117-5ffd12690b63';
+
   contacts: any = [];
   messages: any = [];
   private searchTerms = new Subject<string>();
@@ -38,7 +39,7 @@ export class ChatComponent implements OnInit {
     this.searchTerms.pipe(
       debounceTime(300),
       distinctUntilChanged(),
-      switchMap((term: string) => this.postService.searchForUser(this.userId, term))
+      switchMap((term: string) => this.chatService.searchForUser(this.userId, term))
     ).subscribe({
       next: (searchContacts: any) => this.searchContacts = searchContacts,
       error: (error: any) => console.log('Error Message: ', error)
@@ -46,7 +47,7 @@ export class ChatComponent implements OnInit {
   }
 
   loadContacts() {
-    this.postService.getAllFriends(this.userId).subscribe({
+    this.chatService.getAllFriends(this.userId).subscribe({
       next: (contacts: any) => {
         this.contacts = contacts;
         this.searchContacts = contacts;
@@ -57,7 +58,7 @@ export class ChatComponent implements OnInit {
 
   searchContact(): void {
     if (this.name) {
-      this.postService.searchForUser(this.userId, this.name).subscribe({
+      this.chatService.searchForUser(this.userId, this.name).subscribe({
         next: (searchContacts: any) => {
           this.searchContacts = searchContacts;
         },
@@ -81,7 +82,7 @@ export class ChatComponent implements OnInit {
 
   loadMessages() {
     if (this.receiverId) {
-      this.postService.getMessages(this.userId, this.receiverId).subscribe({
+      this.chatService.getMessages(this.userId, this.receiverId).subscribe({
         next: (messages: any) => {
           this.messages = messages;
         },
@@ -93,7 +94,7 @@ export class ChatComponent implements OnInit {
 
   sendMessage() {
     if (this.contentMessage && this.receiverId) {
-      this.postService.sendMessage(this.userId, this.receiverId, this.contentMessage).subscribe({
+      this.chatService.sendMessage(this.userId, this.receiverId, this.contentMessage).subscribe({
         next: (response: any) => {
           this.messages.push({
             content: this.contentMessage,
