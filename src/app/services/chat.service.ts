@@ -1,13 +1,13 @@
 import { Injectable, inject } from '@angular/core';
 import {HttpClient} from "@angular/common/http";
 import * as signalR from '@microsoft/signalr';
-
-const BASE_URL = 'https://jsonplaceholder.typicode.com/posts';
+import { Observable } from "rxjs";
 
 @Injectable({
   providedIn: 'root'
 })
-export class PostService {
+
+export class ChatService {
 
   public connection : signalR.HubConnection = new signalR.HubConnectionBuilder()
     .withUrl("https://ourschool.somee.com/chatHub")
@@ -29,11 +29,19 @@ export class PostService {
     }
   }
 
-  getAllFriends(userId: string) {
+  getAllFriends(userId: string): Observable<any> {
     return this.http.get(`http://ourschool.somee.com/api/Chat/GetAllFriends/${userId}`);
   }
 
-  getPost() {
-    return this.http.get(BASE_URL);
+  searchForUser(userId: string, name: string): Observable<any> {
+    return this.http.get(`http://ourschool.somee.com/api/Chat/SearchForUser/${userId}/${name}`);
+  }
+
+  getMessages(userId1: string, userId2: string): Observable<any>  {
+    return this.http.get(`http://ourschool.somee.com/api/Chat/GetChatBetweenTowUser/${userId1}/${userId2}`);
+  }
+
+  sendMessage(senderId: string, receiverId: string, contentMessage: string){
+    return this.http.post(`http://ourschool.somee.com/api/Chat/SendMessage/${senderId}/${receiverId}/${contentMessage}`, {});
   }
 }
