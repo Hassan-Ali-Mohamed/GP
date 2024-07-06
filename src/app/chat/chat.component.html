@@ -12,7 +12,7 @@
              class="contact"
              [ngClass]="{'selected': contact.userId === selectedContactId}"
              (click)="selectContact(contact)">
-          <img src="../assets/user-icon.png" alt="Profile Picture">
+          <img src="../../assets/images/user-icon.png" alt="Profile Picture">
           <div class="contact-info">
             <h3>{{ contact.userName }}</h3>
             <p>{{ contact.role }}</p>
@@ -23,7 +23,7 @@
 
     <div class="chat">
       <div class="chat-header">
-        <img src="assets/user-icon.png" alt="Profile Picture">
+        <img src="../../assets/images/user-icon.png" alt="Profile Picture">
         <h3>{{ selectedContact?.userName || 'Select a Contact' }}</h3>
       </div>
 
